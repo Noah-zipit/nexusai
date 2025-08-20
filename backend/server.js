@@ -41,6 +41,23 @@ app.use((req, res, next) => {
   next();
 });
 
+// Root API endpoint - Added to fix the "Not Found" error
+app.get('/', (req, res) => {
+  res.json({
+    name: 'NexusAI API',
+    status: 'running',
+    version: '1.0.0',
+    endpoints: [
+      '/api/chat/completions',
+      '/api/concurrent-chat', 
+      '/api/text-to-speech',
+      '/api/vision',
+      '/health',
+      '/api/models'
+    ]
+  });
+});
+
 // Helper functions for each API format - Updated based on test results
 function extractChatGPTResponse(data) {
   if (typeof data === 'string') return data;

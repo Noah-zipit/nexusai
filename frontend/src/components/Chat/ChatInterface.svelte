@@ -76,45 +76,47 @@
     <span class="model-name">{activeModel?.name || 'AI Model'}</span>
   </div>
   
-  <div class="messages" bind:this={scrollContainer}>
-    {#each $activeMessages as message, i}
-      <div class="message {message.role}">
-        <div class="message-content">
-          {#if typeof message.content === 'string'}
-            {message.content}
-          {:else if message.content === null || message.content === undefined}
-            <em>No content</em>
-          {:else}
-            <pre>
-              {JSON.stringify(message.content, null, 2)}
-            </pre>
+  <div class="messages-container">
+    <div class="messages" bind:this={scrollContainer}>
+      {#each $activeMessages as message, i}
+        <div class="message {message.role}">
+          <div class="message-content">
+            {#if typeof message.content === 'string'}
+              {message.content}
+            {:else if message.content === null || message.content === undefined}
+              <em>No content</em>
+            {:else}
+              <pre>
+                {JSON.stringify(message.content, null, 2)}
+              </pre>
+            {/if}
+          </div>
+          
+          {#if message.role === 'assistant' && i === $activeMessages.length - 1 && !$chatStore.loading}
+            <SmartSuggestions 
+              message={message.content || ''} 
+              loading={$chatStore.loading}
+              on:select={handleSuggestionSelect}
+            />
           {/if}
         </div>
-        
-        {#if message.role === 'assistant' && i === $activeMessages.length - 1 && !$chatStore.loading}
-          <SmartSuggestions 
-            message={message.content || ''} 
-            loading={$chatStore.loading}
-            on:select={handleSuggestionSelect}
-          />
-        {/if}
-      </div>
-    {/each}
-    
-    {#if $chatStore.loading}
-      <div class="loading-message">
-        <div class="typing-indicator">
-          <span></span><span></span><span></span>
+      {/each}
+      
+      {#if $chatStore.loading}
+        <div class="loading-message">
+          <div class="typing-indicator">
+            <span></span><span></span><span></span>
+          </div>
+          <p class="loading-text">Getting response from {activeModel?.name || 'AI'}...</p>
         </div>
-        <p class="loading-text">Getting response from {activeModel?.name || 'AI'}...</p>
-      </div>
-    {/if}
-    
-    {#if $activeMessages.length === 0 && !$chatStore.loading}
-      <div class="empty-state">
-        <p>Start a conversation with the AI</p>
-      </div>
-    {/if}
+      {/if}
+      
+      {#if $activeMessages.length === 0 && !$chatStore.loading}
+        <div class="empty-state">
+          <p>Start a conversation with the AI</p>
+        </div>
+      {/if}
+    </div>
   </div>
   
   <div class="input-area">
@@ -172,9 +174,11 @@
   .chat-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: calc(100vh - 100px);
     max-width: 800px;
     margin: 0 auto;
+    position: relative;
+    overflow: hidden;
   }
   
   .active-model {
@@ -182,7 +186,8 @@
     align-items: center;
     padding: 0.75rem;
     border-bottom: 1px solid var(--border, #333);
-    margin-bottom: 1rem;
+    margin-bottom: 0;
+    flex-shrink: 0;
   }
   
   .model-icon {
@@ -202,13 +207,19 @@
     font-weight: 500;
   }
   
-  .messages {
+  .messages-container {
     flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .messages {
+    height: 100%;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    padding: 0.5rem 0;
+    padding: 1rem 0.5rem 1rem;
     scroll-behavior: smooth;
   }
   
@@ -283,9 +294,13 @@
   }
   
   .input-area {
-    margin-top: 1rem;
-    padding-top: 0.75rem;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
     border-top: 1px solid var(--border, #333);
+    flex-shrink: 0;
+    background-color: var(--bg-primary, #0f0f0f);
+    position: relative;
+    z-index: 10;
   }
   
   .image-preview {
@@ -323,6 +338,7 @@
   form {
     display: flex;
     gap: 0.5rem;
+    align-items: center;
   }
   
   input {
@@ -332,13 +348,17 @@
     color: var(--text-primary, #fff);
     padding: 0.75rem;
     border-radius: 4px;
+    min-height: 44px;
+    font-size: 16px; /* Prevents zoom on mobile */
   }
   
   .image-button, .send-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
+    min-width: 44px;
+    width: 44px;
+    height: 44px;
     background-color: var(--bg-tertiary, #1a1a1a);
     color: var(--text-secondary, #999);
     border: 1px solid var(--border, #333);
@@ -385,16 +405,38 @@
   
   .chat-container.compact-mode .active-model {
     padding: 0.5rem 0.75rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .chat-container.compact-mode .input-area {
-    margin-top: 0.75rem;
-    padding-top: 0.5rem;
   }
   
   .chat-container.compact-mode input {
     padding: 0.5rem 0.75rem;
+  }
+  
+  /* Mobile styles */
+  @media (max-width: 768px) {
+    .chat-container {
+      height: calc(100vh - 60px);
+    }
+    
+    .input-area {
+      padding: 0.5rem;
+    }
+    
+    /* Ensure buttons have minimum touch target size */
+    .image-button, .send-button {
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+  
+  /* Fix for iOS/Android keyboard issues */
+  @media (max-width: 768px) and (max-height: 600px) {
+    .chat-container {
+      height: calc(100vh - 30px);
+    }
+    
+    .messages {
+      padding-bottom: 5px;
+    }
   }
   
   @keyframes fadeIn {

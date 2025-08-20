@@ -1,0 +1,40 @@
+/* fix.css - Updated for home bar */
+
+/* Hide scrollbars */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Fix input area for Android with home bar */
+.input-area {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  background-color: var(--bg-primary, #0f0f0f);
+  padding: 10px;
+  /* Add padding for home bar */
+  padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  /* Add viewport-fill support for older browsers */
+  padding-bottom: calc(10px + constant(safe-area-inset-bottom, 0px));
+}
+
+/* Ensure buttons are tap-sized */
+.send-button, .image-button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Prevent font zoom */
+input, textarea {
+  font-size: 16px;
+}
+
+/* Make sure message list doesn't go behind home bar */
+.messages {
+  padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+}

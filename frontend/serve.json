@@ -1,13 +1,23 @@
 {
   "headers": [
     {
-      "source": "**/*",
-      "headers": [
-        { "key": "Content-Type", "value": "text/html" }
-      ]
+      "source": "**/*.js",
+      "headers": [{"key": "Content-Type", "value": "application/javascript"}]
+    },
+    {
+      "source": "**/*.css",
+      "headers": [{"key": "Content-Type", "value": "text/css"}]
+    },
+    {
+      "source": "**/service-worker.js",
+      "headers": [{"key": "Content-Type", "value": "application/javascript"}]
+    },
+    {
+      "source": "**/sw.js",
+      "headers": [{"key": "Content-Type", "value": "application/javascript"}]
     }
   ],
   "rewrites": [
-    { "source": "**", "destination": "/index.html" }
+    {"source": "/**", "destination": "/index.html"}
   ]
 }

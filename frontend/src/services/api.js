@@ -1,8 +1,11 @@
 import axios from 'axios';
 
+// Get API URL from environment variables with fallback
+const API_URL = import.meta.env.VITE_API_URL || '';
+
 // Base API configuration with timeout
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_URL,
   timeout: 30000, // 30 second timeout
   headers: {
     'Content-Type': 'application/json'
@@ -35,9 +38,10 @@ export async function sendMessage(modelId, messages, options = {}) {
   try {
     console.log(`Sending message to ${modelId}:`, messages);
     
-    const response = await api.post('/chat/completions', {
+    // Use the full API path for Vercel deployment
+    const response = await api.post('/api/chat/completions', {
       model: modelId,
-      messages: messages, // Make sure we're sending the actual messages array
+      messages: messages,
       temperature: options.temperature || 0.7,
       max_tokens: options.maxTokens || 1000
     });
@@ -91,8 +95,8 @@ export async function sendMessageWithImage(modelId, messages, imageBase64, optio
   try {
     console.log(`Sending image message to ${modelId}:`, messages);
     
-    // First, analyze the image with vision API
-    const visionResponse = await api.post('/vision', {
+    // Use the full API path for Vercel deployment
+    const visionResponse = await api.post('/api/vision', {
       image: imageBase64
     });
     

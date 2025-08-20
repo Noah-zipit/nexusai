@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "echo '{\"headers\":[{\"source\":\"**/*\",\"headers\":[{\"key\":\"Content-Type\",\"value\":\"text/html\"}]}],\"rewrites\":[{\"source\":\"**\",\"destination\":\"/index.html\"}]}' > dist/serve.json",
+    "postbuild": "echo '{\"headers\":[{\"source\":\"**/*.js\",\"headers\":[{\"key\":\"Content-Type\",\"value\":\"application/javascript\"}]},{\"source\":\"**/*.css\",\"headers\":[{\"key\":\"Content-Type\",\"value\":\"text/css\"}]},{\"source\":\"**/*.json\",\"headers\":[{\"key\":\"Content-Type\",\"value\":\"application/json\"}]}],\"rewrites\":[{\"source\":\"**\",\"destination\":\"/index.html\"}]}' > dist/serve.json",
     "preview": "vite preview",
-    "start": "npx serve -s dist --cors"
+    "start": "npx serve -s dist --cors --single"
   },
   "dependencies": {
     "axios": "^1.11.0",

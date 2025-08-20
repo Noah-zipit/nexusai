@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "postbuild": "echo '{\"headers\":[{\"source\":\"**/*\",\"headers\":[{\"key\":\"Content-Type\",\"value\":\"text/html\"}]}],\"rewrites\":[{\"source\":\"**\",\"destination\":\"/index.html\"}]}' > dist/serve.json",
     "preview": "vite preview",
-    "start": "npx serve -s dist"
+    "start": "npx serve -s dist --cors"
   },
   "dependencies": {
     "axios": "^1.11.0",
@@ -15,13 +16,13 @@
     "highlight.js": "^11.11.1",
     "localforage": "^1.10.0",
     "marked": "^9.1.6",
-    "serve": "^14.2.1",
     "svelte-copy-to-clipboard": "^0.2.5"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.4.6",
     "svelte": "^4.2.3",
     "vite": "^4.5.0",
-    "vite-plugin-pwa": "^0.16.7"
+    "vite-plugin-pwa": "^0.16.7",
+    "serve": "^14.2.1"
   }
 }

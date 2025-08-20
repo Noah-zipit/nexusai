@@ -1,8 +1,11 @@
 import axios from 'axios';
 
+// Get the API URL from environment variables, with fallback
+const API_URL = import.meta.env.VITE_API_URL || '/api';
+
 // Base API configuration with timeout
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_URL,
   timeout: 30000, // 30 second timeout
   headers: {
     'Content-Type': 'application/json'
@@ -35,9 +38,16 @@ export async function sendMessage(modelId, messages, options = {}) {
   try {
     console.log(`Sending message to ${modelId}:`, messages);
     
-    const response = await api.post('/chat/completions', {
+    // Check if we need to append /api to the endpoint
+    const endpoint = API_URL.endsWith('/api') ? 
+      '/chat/completions' : 
+      '/api/chat/completions';
+    
+    console.log(`Using API endpoint: ${API_URL}${endpoint}`);
+    
+    const response = await api.post(endpoint, {
       model: modelId,
-      messages: messages, // Make sure we're sending the actual messages array
+      messages: messages,
       temperature: options.temperature || 0.7,
       max_tokens: options.maxTokens || 1000
     });
@@ -91,8 +101,13 @@ export async function sendMessageWithImage(modelId, messages, imageBase64, optio
   try {
     console.log(`Sending image message to ${modelId}:`, messages);
     
+    // Check if we need to append /api to the endpoint
+    const visionEndpoint = API_URL.endsWith('/api') ? 
+      '/vision' : 
+      '/api/vision';
+    
     // First, analyze the image with vision API
-    const visionResponse = await api.post('/vision', {
+    const visionResponse = await api.post(visionEndpoint, {
       image: imageBase64
     });
     

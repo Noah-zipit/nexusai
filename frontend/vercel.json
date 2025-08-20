@@ -1,9 +1,6 @@
 {
   "rewrites": [
+    { "source": "/api/:path*", "destination": "https://nexusai-production-273b.up.railway.app/api/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
-  ],
-  "buildCommand": "cd frontend && npm install && npm run build",
-  "outputDirectory": "frontend/dist",
-  "installCommand": "cd frontend && npm install",
-  "framework": "vite"
+  ]
 }

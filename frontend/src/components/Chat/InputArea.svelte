@@ -85,6 +85,8 @@
     border-radius: 8px;
     padding: 1rem;
     box-shadow: 0 4px 20px var(--shadow-color);
+    position: relative;
+    z-index: 10;
   }
   
   .image-preview {
@@ -124,6 +126,7 @@
     border: 1px solid var(--border-color);
     border-radius: 4px;
     overflow: hidden;
+    align-items: center;
   }
   
   .message-input {
@@ -134,6 +137,8 @@
     max-height: 150px;
     resize: none;
     background-color: transparent;
+    color: var(--text-primary);
+    font-size: 16px; /* Prevent zoom on mobile */
   }
   
   .message-input:focus {
@@ -159,6 +164,8 @@
     color: var(--text-secondary);
     transition: all 0.2s;
     cursor: pointer;
+    min-width: 36px; /* Ensure minimum width */
+    min-height: 36px; /* Ensure minimum height */
   }
   
   .action-button:hover, .send-button:hover:not(:disabled) {
@@ -195,5 +202,38 @@
   @keyframes bounce {
     0%, 80%, 100% { transform: scale(0); }
     40% { transform: scale(1); }
+  }
+  
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    .input-area {
+      padding: 0.75rem;
+      border-radius: 6px;
+    }
+    
+    .message-input {
+      padding: 0.6rem 0.75rem;
+      min-height: 44px;
+    }
+    
+    .action-button, .send-button {
+      width: 44px;
+      height: 44px; /* Larger touch targets for mobile */
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+  
+  /* Android-specific fixes */
+  @supports (-webkit-appearance:none) {
+    .input-area {
+      padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0.75rem));
+    }
+    
+    /* Fix button visibility */
+    .action-button svg, .send-button svg {
+      width: 22px;
+      height: 22px;
+    }
   }
 </style>

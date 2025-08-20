@@ -6,13 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "echo '{\"headers\":[{\"source\":\"**/*.js\",\"headers\":[{\"key\":\"Content-Type\",\"value\":\"application/javascript\"}]},{\"source\":\"**/*.css\",\"headers\":[{\"key\":\"Content-Type\",\"value\":\"text/css\"}]},{\"source\":\"**/*.json\",\"headers\":[{\"key\":\"Content-Type\",\"value\":\"application/json\"}]}],\"rewrites\":[{\"source\":\"**\",\"destination\":\"/index.html\"}]}' > dist/serve.json",
     "preview": "vite preview",
-    "start": "npx serve -s dist --cors --single"
+    "start": "node server.js"
   },
   "dependencies": {
     "axios": "^1.11.0",
     "dompurify": "^3.2.6",
+    "express": "^4.18.2",
     "highlight.js": "^11.11.1",
     "localforage": "^1.10.0",
     "marked": "^9.1.6",

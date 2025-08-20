@@ -3,7 +3,7 @@
   import { sidebarVisible } from './stores/ui';
   import { themeStore } from './stores/ui';
   import ChatInterface from './components/Chat/ChatInterface.svelte';
-  import Sidebar from './components/sidebar/Sidebar.svelte';
+  import Sidebar from './components/Sidebar/Sidebar.svelte';
   
   function toggleSidebar() {
     sidebarVisible.update(visible => !visible);
@@ -145,5 +145,4 @@
       opacity: 0.5;
     }
   }
-
 </style>
